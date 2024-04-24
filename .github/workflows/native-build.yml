@@ -103,8 +103,6 @@ jobs:
         - name: Prepare Files (Android)
           if: matrix.targetname == 'android'
           run: |
-            ls ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}
-            ls ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib
             cp ${{ env.BUILD_DIR }}/libcsdl.so ${{ env.ARCHIVE_DIR }}
             cp ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so ${{ env.ARCHIVE_DIR }}/libtorrent-rasterbar.so.2.0
         
