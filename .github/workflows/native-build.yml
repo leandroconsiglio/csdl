@@ -28,7 +28,7 @@ jobs:
         fail-fast: false
         matrix:
           include:
-            - { targetname: android, buildos: ubuntu-20.04, arch: x86_64, triplet: release-android-x86_64 }
+            - { targetname: android, buildos: ubuntu-20.04, arch: x86_64, triplet: x64-android }
             #- { targetname: osx, buildos: macos-latest, arch: x64, triplet: release-osx-x64 }
             #- { targetname: osx, buildos: macos-latest, arch: arm64, triplet: release-osx-arm64 }
             #- { targetname: linux, buildos: ubuntu-20.04, arch: x64, triplet: release-linux-x64 }
@@ -70,7 +70,7 @@ jobs:
         - name: Setup CMake (Android)
           if: matrix.targetname == 'android'
           run: |
-            cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${{ github.workspace }}/android-ndk/build/cmake/android.toolchain.cmake -DANDROID_ABI=${{ matrix.arch }} -DVCPKG_TARGET_TRIPLET=x64-android
+            cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${{ github.workspace }}/android-ndk/build/cmake/android.toolchain.cmake -DANDROID_ABI=${{ matrix.arch }}
           env:
             CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/native/build/android-${{ matrix.arch }}.cmake            
             ANDROID_NDK_HOME: ${{ github.workspace }}/android-ndk
