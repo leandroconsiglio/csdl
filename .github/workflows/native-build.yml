@@ -53,7 +53,7 @@ jobs:
           if: matrix.targetname == 'android'
           run: |
             sudo apt-get update
-            wget -nv -O android-ndk.zip https://dl.google.com/android/repository/android-ndk-${NDK_VERSION}-linux.zip
+            wget -nv -O android-ndk.zip https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
             unzip -qq android-ndk.zip
             mv android-ndk-r25c android-ndk
             export TOOLCHAIN="${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-x86_64"
