@@ -71,7 +71,9 @@ jobs:
 
         - name: Setup CMake (Android)
           if: matrix.targetname == 'android'
-          run: cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${{ github.workspace }}/android-ndk/build/cmake/android.toolchain.cmake -DANDROID_ABI=${{ matrix.arch }}
+          run: |
+            echo $ANDROID_NDK_HOME
+            cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${{ github.workspace }}/android-ndk/build/cmake/android.toolchain.cmake -DANDROID_ABI=${{ matrix.arch }}
           env:
             CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/native/build/android-${{ matrix.arch }}.cmake            
             ANDROID_NDK_HOME: ${{ github.workspace }}/android-ndk
