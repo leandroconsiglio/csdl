@@ -7,9 +7,6 @@ on:
         type: string
         required: true
         description: Version number (package)
-      nuget:
-        type: boolean
-        description: Publish Package to NuGet
 
 permissions:
   packages: write
@@ -31,12 +28,13 @@ jobs:
         fail-fast: false
         matrix:
           include:
-            - { targetname: osx, buildos: macos-latest, arch: x64, triplet: release-osx-x64 }
-            - { targetname: osx, buildos: macos-latest, arch: arm64, triplet: release-osx-arm64 }
-            - { targetname: linux, buildos: ubuntu-20.04, arch: x64, triplet: release-linux-x64 }
-            - { targetname: linux, buildos: ubuntu-20.04, arch: arm64, triplet: release-linux-arm64 }
-            - { targetname: windows, buildos: windows-latest, arch: x64, triplet: x64-windows-release }
-            - { targetname: windows, buildos: windows-latest,  arch: arm64, triplet: release-windows-arm64 }
+            - { targetname: android, buildos: ubuntu-20.04, arch: x64, triplet: release-android-x64 }
+            #- { targetname: osx, buildos: macos-latest, arch: x64, triplet: release-osx-x64 }
+            #- { targetname: osx, buildos: macos-latest, arch: arm64, triplet: release-osx-arm64 }
+            #- { targetname: linux, buildos: ubuntu-20.04, arch: x64, triplet: release-linux-x64 }
+            #- { targetname: linux, buildos: ubuntu-20.04, arch: arm64, triplet: release-linux-arm64 }
+            #- { targetname: windows, buildos: windows-latest, arch: x64, triplet: x64-windows-release }
+            #- { targetname: windows, buildos: windows-latest,  arch: arm64, triplet: release-windows-arm64 }
 
       steps:
         - name: Checkout
@@ -59,6 +57,12 @@ jobs:
           run: cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
           env:
             CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/native/build/linux-${{ matrix.arch }}.cmake
+
+        - name: Setup CMake (Android)
+          if: matrix.targetname == 'android'
+          run: cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
+          env:
+            CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/native/build/android-${{ matrix.arch }}.cmake
 
         - name: Setup CMake (Windows)
           if: matrix.targetname == 'windows'
@@ -85,6 +89,12 @@ jobs:
             cp ${{ env.BUILD_DIR }}/libcsdl.so ${{ env.ARCHIVE_DIR }}
             cp ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so ${{ env.ARCHIVE_DIR }}/libtorrent-rasterbar.so.2.0
 
+        - name: Prepare Files (Android)
+          if: matrix.targetname == 'android'
+          run: |
+            cp ${{ env.BUILD_DIR }}/libcsdl.so ${{ env.ARCHIVE_DIR }}
+            cp ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so ${{ env.ARCHIVE_DIR }}/libtorrent-rasterbar.so.2.0
+        
         - name: Prepare Files (macOS)
           if: matrix.targetname == 'osx'
           run: |
@@ -139,13 +149,7 @@ jobs:
           name: linux-arm64
           path: native/nuget/runtimes/linux-arm64/native
 
-      - name: Build Package
-        run: dotnet pack -c Release -p:Version=${{ github.event.inputs.version }} -o ./packages native/nuget
-
-      - name: Publish Package (NuGet)
-        if: github.event.inputs.nuget == 'true'
-        run: dotnet nuget push -s https://api.nuget.org/v3/index.json --skip-duplicate -k ${{ secrets.NUGET_KEY }} ./packages/*.nupkg
-
-      - name: Publish Package (GitHub)
-        if: github.event.inputs.nuget != 'true'
-        run: dotnet nuget push -s https://nuget.pkg.github.com/aspriddell/index.json --skip-duplicate -k ${{ github.token }} ./packages/*.nupkg
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-x64
+          path: native/nuget/runtimes/android-x64/native
