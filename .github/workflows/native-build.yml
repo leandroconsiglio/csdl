@@ -49,6 +49,15 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y binutils-aarch64-linux-gnu g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
 
+        - name: Install Additional Packages (Android)
+          if: matrix.targetname == 'android'
+          run: |
+            sudo apt-get update
+            wget -nv -O android-ndk.zip https://dl.google.com/android/repository/android-ndk-${NDK_VERSION}-linux.zip
+            unzip -qq android-ndk.zip
+            mv android-ndk-r25c android-ndk
+            export TOOLCHAIN="${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-x86_64"
+
         - name: Setup VCPKG
           uses: lukka/run-vcpkg@v11
 
