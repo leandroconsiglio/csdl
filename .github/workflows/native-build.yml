@@ -100,6 +100,7 @@ jobs:
         - name: Prepare Files (Android)
           if: matrix.targetname == 'android'
           run: |
+            ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/bin/llvm-strip --strip-unneeded -x ${{ env.BUILD_DIR }}/libcsdl.so
             cp ${{ env.BUILD_DIR }}/libcsdl.so ${{ env.ARCHIVE_DIR }}
         
         - name: Prepare Files (macOS)
