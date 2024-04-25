@@ -102,7 +102,9 @@ jobs:
           run: |
             cp ${{ env.BUILD_DIR }}/libcsdl.so ${{ env.ARCHIVE_DIR }}
             ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/bin/llvm-strip --strip-unneeded -x ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so
-            cp ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so ${{ env.ARCHIVE_DIR }}/libtorrent-rasterbar.so.2.0            
+            cp ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so ${{ env.ARCHIVE_DIR }}/libtorrent-rasterbar.so.2.0
+            ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/bin/llvm-strip --strip-unneeded -x ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/sysroot/usr/lib/${{ matrix.arch }}-linux-android/libc++_shared.so
+            cp ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/sysroot/usr/lib/${{ matrix.arch }}-linux-android/libc++_shared.so ${{ env.ARCHIVE_DIR }}/libc++_shared.so
         
         - name: Prepare Files (macOS)
           if: matrix.targetname == 'osx'
