@@ -28,7 +28,7 @@ jobs:
         fail-fast: false
         matrix:
           include:
-            - { targetname: android, buildos: ubuntu-20.04, arch: x86_64, triplet: x64-android }
+            - { targetname: android, buildos: ubuntu-20.04, arch: x86_64, triplet: release-android-x64 }
             #- { targetname: osx, buildos: macos-latest, arch: x64, triplet: release-osx-x64 }
             #- { targetname: osx, buildos: macos-latest, arch: arm64, triplet: release-osx-arm64 }
             #- { targetname: linux, buildos: ubuntu-20.04, arch: x64, triplet: release-linux-x64 }
@@ -69,8 +69,7 @@ jobs:
 
         - name: Setup CMake (Android)
           if: matrix.targetname == 'android'
-          run: |
-            cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DANDROID_ABI=${{ matrix.arch }} -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${{ github.workspace }}/android-ndk/build/cmake/android.toolchain.cmake
+          run: cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${{ github.workspace }}/android-ndk/build/cmake/android.toolchain.cmake
           env:
             CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/native/build/android-${{ matrix.arch }}.cmake            
             ANDROID_NDK_HOME: ${{ github.workspace }}/android-ndk
@@ -121,46 +120,3 @@ jobs:
           with:
             name: ${{ matrix.targetname }}-${{ matrix.arch }}
             path: ${{ env.ARCHIVE_DIR }}/*
-
-  package:
-    name: Build Package
-    runs-on: ubuntu-latest
-
-    needs: [build-platforms]
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: osx-x64
-          path: native/nuget/runtimes/osx-x64/native
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: osx-arm64
-          path: native/nuget/runtimes/osx-arm64/native
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: windows-x64
-          path: native/nuget/runtimes/win-x64/native
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: windows-arm64
-          path: native/nuget/runtimes/win-arm64/native
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: linux-x64
-          path: native/nuget/runtimes/linux-x64/native
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: linux-arm64
-          path: native/nuget/runtimes/linux-arm64/native
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: android-x64
-          path: native/nuget/runtimes/android-x64/native
