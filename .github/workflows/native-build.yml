@@ -102,7 +102,7 @@ jobs:
           run: |
             cp ${{ env.BUILD_DIR }}/libcsdl.so ${{ env.ARCHIVE_DIR }}
             ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/bin/llvm-strip --strip-unneeded -x ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so
-            ls ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib
+            ls ${{ github.workspace }}/android-ndk/sources/cxx-stl/llvm-libc++/libs/x86_64
             cp ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so ${{ env.ARCHIVE_DIR }}/libtorrent-rasterbar.so.2.0            
         
         - name: Prepare Files (macOS)
