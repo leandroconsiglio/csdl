@@ -28,7 +28,7 @@ jobs:
         fail-fast: false
         matrix:
           include:
-            - { targetname: android, buildos: ubuntu-20.04, arch: x86_64, triplet: release-android-x64 }
+            - { targetname: android, buildos: ubuntu-20.04, arch: x64, triplet: release-android-x64 }
             #- { targetname: osx, buildos: macos-latest, arch: x64, triplet: release-osx-x64 }
             #- { targetname: osx, buildos: macos-latest, arch: arm64, triplet: release-osx-arm64 }
             #- { targetname: linux, buildos: ubuntu-20.04, arch: x64, triplet: release-linux-x64 }
