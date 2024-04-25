@@ -1,9 +1,6 @@
 set(VCPKG_TARGET_ARCHITECTURE x64)
 set(VCPKG_CMAKE_SYSTEM_NAME Android)
-set(VCPKG_TARGET_TRIPLET x64-android)
 set(VCPKG_CMAKE_CONFIGURE_OPTIONS -DANDROID_ABI=x86_64)
 set(VCPKG_MAKE_BUILD_TRIPLET "--host=x86_64-linux-android")
-#[[set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE, ${ANDROID_NDK_HOME}/build/cmake/android.toolchain.cmake)]]
-set(ANDROID_ABI, x86_64)
 
 include("${CMAKE_CURRENT_LIST_DIR}/triplet-common.cmake")
