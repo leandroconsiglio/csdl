@@ -25,9 +25,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
   set(CMAKE_INSTALL_RPATH "$ORIGIN")
-#[[elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")]]
-  #[[set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)]]
-  #[[set(CMAKE_INSTALL_RPATH "$ORIGIN")]]
 endif()
 
 add_library(csdl SHARED native/src/library.cpp native/src/events.cpp
