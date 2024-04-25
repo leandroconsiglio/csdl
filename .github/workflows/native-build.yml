@@ -67,7 +67,7 @@ jobs:
 
         - name: Setup CMake (Android)
           if: matrix.targetname == 'android'
-          run: cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DANDROID_STL=c++_static
+          run: cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
           env:
             CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/native/build/android-${{ matrix.arch }}.cmake            
             ANDROID_NDK_HOME: ${{ github.workspace }}/android-ndk
@@ -101,10 +101,6 @@ jobs:
           if: matrix.targetname == 'android'
           run: |
             cp ${{ env.BUILD_DIR }}/libcsdl.so ${{ env.ARCHIVE_DIR }}
-            ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/bin/llvm-strip --strip-unneeded -x ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so
-            cp ${{ env.BUILD_DIR }}/vcpkg_installed/${{ matrix.triplet }}/lib/libtorrent-rasterbar.so ${{ env.ARCHIVE_DIR }}/libtorrent-rasterbar.so.2.0
-            ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/bin/llvm-strip --strip-unneeded -x ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/sysroot/usr/lib/${{ matrix.arch }}-linux-android/libc++_shared.so
-            cp ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/sysroot/usr/lib/${{ matrix.arch }}-linux-android/libc++_shared.so ${{ env.ARCHIVE_DIR }}/libc++_shared.so
         
         - name: Prepare Files (macOS)
           if: matrix.targetname == 'osx'
