@@ -7,6 +7,9 @@ on:
         type: string
         required: true
         description: Version number (package)
+      nuget:
+        type: boolean
+        description: Publish Package to NuGet
 
 permissions:
   packages: write
@@ -32,12 +35,12 @@ jobs:
             - { targetname: android, buildos: ubuntu-20.04, arch: x86_64, triplet: release-android-x86_64 }
             - { targetname: android, buildos: ubuntu-20.04, arch: arm, triplet: release-android-arm }
             - { targetname: android, buildos: ubuntu-20.04, arch: arm64, triplet: release-android-arm64 }
-            #- { targetname: osx, buildos: macos-latest, arch: x64, triplet: release-osx-x64 }
-            #- { targetname: osx, buildos: macos-latest, arch: arm64, triplet: release-osx-arm64 }
-            #- { targetname: linux, buildos: ubuntu-20.04, arch: x64, triplet: release-linux-x64 }
-            #- { targetname: linux, buildos: ubuntu-20.04, arch: arm64, triplet: release-linux-arm64 }
-            #- { targetname: windows, buildos: windows-latest, arch: x64, triplet: x64-windows-release }
-            #- { targetname: windows, buildos: windows-latest,  arch: arm64, triplet: release-windows-arm64 }
+            - { targetname: osx, buildos: macos-latest, arch: x64, triplet: release-osx-x64 }
+            - { targetname: osx, buildos: macos-latest, arch: arm64, triplet: release-osx-arm64 }
+            - { targetname: linux, buildos: ubuntu-20.04, arch: x64, triplet: release-linux-x64 }
+            - { targetname: linux, buildos: ubuntu-20.04, arch: arm64, triplet: release-linux-arm64 }
+            - { targetname: windows, buildos: windows-latest, arch: x64, triplet: x64-windows-release }
+            - { targetname: windows, buildos: windows-latest,  arch: arm64, triplet: release-windows-arm64 }
 
       steps:
         - name: Checkout
