@@ -28,7 +28,8 @@ jobs:
         fail-fast: false
         matrix:
           include:
-            - { targetname: android, buildos: ubuntu-20.04, arch: x86_64, triplet: release-android-x86_64 }
+            - { targetname: android, buildos: ubuntu-20.04, arch: x86, triplet: release-android-x86, llvm: i686 }
+            - { targetname: android, buildos: ubuntu-20.04, arch: x86_64, triplet: release-android-x86_64, llvm: x86_64 }
             #- { targetname: osx, buildos: macos-latest, arch: x64, triplet: release-osx-x64 }
             #- { targetname: osx, buildos: macos-latest, arch: arm64, triplet: release-osx-arm64 }
             #- { targetname: linux, buildos: ubuntu-20.04, arch: x64, triplet: release-linux-x64 }
@@ -100,7 +101,7 @@ jobs:
         - name: Prepare Files (Android)
           if: matrix.targetname == 'android'
           run: |
-            ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.arch }}/bin/llvm-strip --strip-unneeded -x ${{ env.BUILD_DIR }}/libcsdl.so
+            ${{ github.workspace }}/android-ndk/toolchains/llvm/prebuilt/linux-${{ matrix.llvm }}/bin/llvm-strip --strip-unneeded -x ${{ env.BUILD_DIR }}/libcsdl.so
             cp ${{ env.BUILD_DIR }}/libcsdl.so ${{ env.ARCHIVE_DIR }}
         
         - name: Prepare Files (macOS)
