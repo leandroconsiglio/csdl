@@ -68,7 +68,7 @@ jobs:
 
         - name: Setup CMake (Android)
           if: matrix.targetname == 'android'
-          run: cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DANDROID_PLATFORM=android-21
+          run: cmake -B ${{ env.BUILD_DIR }} -S . -DVCPKG_OVERLAY_TRIPLETS=${{ env.TRIPLETS_DIR }} -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
           env:
             CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/native/build/android-${{ matrix.arch }}.cmake            
             ANDROID_NDK_HOME: ${{ github.workspace }}/android-ndk
