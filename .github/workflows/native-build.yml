@@ -124,3 +124,72 @@ jobs:
           with:
             name: ${{ matrix.targetname }}-${{ matrix.arch }}
             path: ${{ env.ARCHIVE_DIR }}/*
+
+  package:
+    name: Build Package
+    runs-on: ubuntu-latest
+
+    needs: [build-platforms]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: osx-x64
+          path: native/nuget/runtimes/osx-x64/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: osx-arm64
+          path: native/nuget/runtimes/osx-arm64/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-x64
+          path: native/nuget/runtimes/win-x64/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-arm64
+          path: native/nuget/runtimes/win-arm64/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: linux-x64
+          path: native/nuget/runtimes/linux-x64/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: linux-arm64
+          path: native/nuget/runtimes/linux-arm64/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-x86
+          path: native/nuget/runtimes/android-x86/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-x86_64
+          path: native/nuget/runtimes/android-x86_64/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-arm
+          path: native/nuget/runtimes/android-arm/native
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-arm64
+          path: native/nuget/runtimes/android-arm64/native
+
+      - name: Build Package
+        run: dotnet pack -c Release -p:Version=${{ github.event.inputs.version }} -o ./packages native/nuget
+
+      - name: Publish Package (NuGet)
+        if: github.event.inputs.nuget == 'true'
+        run: dotnet nuget push -s https://api.nuget.org/v3/index.json --skip-duplicate -k ${{ secrets.NUGET_KEY }} ./packages/*.nupkg
+
+      - name: Publish Package (GitHub)
+        if: github.event.inputs.nuget != 'true'
+        run: dotnet nuget push -s https://nuget.pkg.github.com/aspriddell/index.json --skip-duplicate -k ${{ github.token }} ./packages/*.nupkg
