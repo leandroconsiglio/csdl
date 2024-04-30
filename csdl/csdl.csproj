@@ -32,8 +32,8 @@
         <None Include="..\readme.md" Pack="true" PackagePath="docs" Visible="false"/>
     </ItemGroup>
 
-    <ItemGroup>
+    <!--<ItemGroup>
         <PackageReference Include="csdl.Native" Version="1.0.2"/>
-    </ItemGroup>
+    </ItemGroup>-->
 
 </Project>
